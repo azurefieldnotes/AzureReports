@@ -1,3 +1,39 @@
+
+<#PSScriptInfo
+
+.VERSION 1.0
+
+.GUID 9b00cd5d-dd12-4edc-a2a7-8f2e8de2d6de
+
+.AUTHOR Chris Speers
+
+.COMPANYNAME Avanade / ACE
+
+.COPYRIGHT 2017 Avanade, Inc. "Imagine!"
+
+.TAGS Report Azure Arm
+
+.LICENSEURI 
+
+.PROJECTURI https://github.com/azurefieldnotes/AzureReports
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+#>
+
+<# 
+
+.DESCRIPTION 
+ Exports a large set of Azure data in flat data sets
+#> 
 #REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},Avanade.AzureReports
 using module Avanade.AzureReports
 
@@ -141,3 +177,4 @@ foreach ($Report in $DetailReport.Summaries)
 {
     Write-Output $Report.Export()
 }
+
