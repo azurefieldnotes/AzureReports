@@ -12,7 +12,7 @@ Class ArmEventHttpRequest
     [string]$ClientIpAddress
     [string]$Method
 }
-
+<#
 Class ArmEventProperties:ArmItem
 {
     [string]$StatusCode
@@ -22,6 +22,7 @@ Class ArmEventProperties:ArmItem
     [string]$IncidentType
     [string]$Title
     [string]$Service
+    [string]$Description
     [string]$ServiceName
     [string]$Region
     [string]${Transcript Of Communication}
@@ -35,3 +36,4 @@ Class ArmEventProperties:ArmItem
     [string]$RoleDefinitionId
     [string]$Scope
 }
+#>

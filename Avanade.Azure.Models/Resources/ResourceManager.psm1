@@ -372,7 +372,7 @@ Class ArmEventLogEntry
     [string]$Level
     [string]$OperationId
     [ArmLocalizedName]$OperationName
-    [ArmEventProperties]$Properties
+    [System.Collections.Hashtable]$Properties
     [string]$ResourceGroupName
     [ArmLocalizedName]$ResourceProviderName
     [string]$ResourceUri
