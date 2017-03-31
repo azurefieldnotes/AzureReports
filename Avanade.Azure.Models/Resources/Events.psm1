@@ -12,6 +12,7 @@ Class ArmEventHttpRequest
     [string]$ClientIpAddress
     [string]$Method
 }
+
 <#
 Class ArmEventProperties:ArmItem
 {
