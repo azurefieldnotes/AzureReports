@@ -100,6 +100,35 @@ Class GraphDirectoryGroup:GraphDirectoryObject
     [bool]$SecurityEnabled
 }
 
+Class GraphDirectoryApplication:GraphDirectoryObject
+{
+    [object[]]$AddIns
+    [string]$AppId
+    [object[]]$AppRoles
+    [bool]$AvailableToOtherTenants
+    [Uri]$ErrorUrl
+    [object[]]$GroupMembershipClaims
+    [Uri]$Homepage
+    [Uri[]]$IdentifierUris
+    [object[]]$KeyCredentials
+    [string[]]$KnownClientApplications
+    [Uri]$LogoutUrl
+    [bool]$Oauth2AllowImplicitFlow
+    [bool]$Oauth2AllowUrlPathMatching
+    [object[]]$Oauth2Permissions
+    [bool]$Oauth2RequirePostResponse
+    [object[]]$PasswordCredentials
+    [bool]$PublicClient
+    [Uri[]]$ReplyUrls
+    [object[]]$RequiredResourceAccess
+    [Uri]$SamlMetadataUrl
+}
+
+Class GraphDirectoryServicePrincipal:GraphDirectoryObject
+{
+    
+}
+
 Class GraphAuditEvent
 {
     [string]$Activity
