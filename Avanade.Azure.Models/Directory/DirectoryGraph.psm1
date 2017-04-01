@@ -100,31 +100,23 @@ Class GraphDirectoryGroup:GraphDirectoryObject
     [bool]$SecurityEnabled
 }
 
-Class GraphDirectoryApplication:GraphDirectoryObject
+Class GraphDirectoryApplication:GraphDirectoryPrinicipal
 {
     [object[]]$AddIns
     [string]$AppId
     [object[]]$AppRoles
     [bool]$AvailableToOtherTenants
-    [Uri]$ErrorUrl
     [object[]]$GroupMembershipClaims
-    [Uri]$Homepage
     [Uri[]]$IdentifierUris
-    [object[]]$KeyCredentials
     [string[]]$KnownClientApplications
-    [Uri]$LogoutUrl
     [bool]$Oauth2AllowImplicitFlow
     [bool]$Oauth2AllowUrlPathMatching
-    [object[]]$Oauth2Permissions
     [bool]$Oauth2RequirePostResponse
-    [object[]]$PasswordCredentials
     [bool]$PublicClient
-    [Uri[]]$ReplyUrls
     [object[]]$RequiredResourceAccess
-    [Uri]$SamlMetadataUrl
 }
 
-Class ActiveDirectoryPrinicipal:GraphDirectoryObject
+Class GraphDirectoryPrinicipal:GraphDirectoryObject
 {
     [object[]]$AddIns
     [string]$AppId
@@ -138,7 +130,7 @@ Class ActiveDirectoryPrinicipal:GraphDirectoryObject
     [Uri]$SamlMetadataUrl
 }
 
-Class GraphDirectoryServicePrincipal:GraphDirectoryObject
+Class GraphDirectoryServicePrincipal:GraphDirectoryPrinicipal
 {
     [bool]$AccountEnabled
     [object[]]$AlternativeNames
