@@ -124,9 +124,32 @@ Class GraphDirectoryApplication:GraphDirectoryObject
     [Uri]$SamlMetadataUrl
 }
 
+Class ActiveDirectoryPrinicipal:GraphDirectoryObject
+{
+    [object[]]$AddIns
+    [string]$AppId
+    [object[]]$AppRoles
+    [Uri]$ErrorUrl
+    [object[]]$KeyCredentials
+    [Uri]$LogoutUrl
+    [object[]]$Oauth2Permissions
+    [object[]]$PasswordCredentials
+    [Uri[]]$ReplyUrls
+    [Uri]$SamlMetadataUrl
+}
+
 Class GraphDirectoryServicePrincipal:GraphDirectoryObject
 {
-    
+    [bool]$AccountEnabled
+    [object[]]$AlternativeNames
+    [string]$AppDisplayName
+    [string]$AppOwnerTenantId
+    [bool]$AppRoleAssignmentRequired
+    [string]$PreferredTokenSigningKeyThumbprint
+    [string]$PublisherName
+    [string[]]$ServicePrincipalNames
+    [string]$ServicePrincipalType
+    [object[]]$Tags    
 }
 
 Class GraphAuditEvent
