@@ -146,11 +146,21 @@ Class GraphApplicationKey:GraphApplicationPassword
     [string]$Usage
 }
 
+Class GraphApplicationRole
+{
+    [string[]]$AllowedMemberTypes
+    [string]$Description
+    [string]$DisplayName
+    [string]$Id
+    [bool]$IsEnabled
+    [string]$Value
+}
+
 Class GraphDirectoryPrinicipal:GraphDirectoryItem
 {
     [object[]]$AddIns
     [string]$AppId
-    [object[]]$AppRoles
+    [GraphApplicationRole[]]$AppRoles
     [Uri]$ErrorUrl
     [GraphApplicationKey[]]$KeyCredentials
     [Uri]$HomePage
