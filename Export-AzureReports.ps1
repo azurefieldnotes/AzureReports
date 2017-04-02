@@ -12,6 +12,9 @@
 
 .TAGS Report Azure Arm
 
+.DESCRIPTION 
+ Exports a large set of Azure data in flat data sets
+
 .LICENSEURI 
 
 .PROJECTURI https://github.com/azurefieldnotes/AzureReports
@@ -26,10 +29,6 @@
 
 .RELEASENOTES
 
-#>
-<# 
-.DESCRIPTION 
- Exports a large set of Azure data in flat data sets
 #>
 
 #REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},@{ModuleName='Avanade.AzureReports';ModuleVersion="1.0.3"}

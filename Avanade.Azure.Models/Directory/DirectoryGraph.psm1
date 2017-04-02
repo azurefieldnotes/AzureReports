@@ -109,31 +109,65 @@ Class GraphDirectoryGroup:GraphDirectoryObject
     [bool]$SecurityEnabled
 }
 
+Class GraphResourceAccess
+{
+    [string]$Id
+    [string]$Type
+}
+
+Class GraphApplicationResourceAccess
+{
+    [string]$ResourceAppId
+    [GraphResourceAccess[]]$ResourceAccess
+}
+
+Class GraphOauthPermissionGrant:GraphResourceAccess
+{
+    [string]$AdminConsentDescription
+    [string]$AdminConsentDisplayName
+    [bool]$IsEnabled
+    [string]$UserConsentDescription
+    [string]$UserConsentDisplayName
+    [string]$Value
+}
+
+Class GraphApplicationPassword
+{
+    [string]$CustomKeyIdentifier
+    [System.DateTimeOffset]$EndDate
+    [System.DateTimeOffset]$StartDate
+    [string]$KeyId
+    [string]$Value
+}
+
+Class GraphApplicationKey:GraphApplicationPassword
+{
+    [string]$Type
+    [string]$Usage
+}
+
 Class GraphDirectoryPrinicipal:GraphDirectoryItem
 {
     [object[]]$AddIns
     [string]$AppId
     [object[]]$AppRoles
     [Uri]$ErrorUrl
-    [object[]]$KeyCredentials
+    [GraphApplicationKey[]]$KeyCredentials
     [Uri]$HomePage
     [Uri]$LogoutUrl
-    [object[]]$Oauth2Permissions
-    [object[]]$PasswordCredentials
+    [GraphOauthPermissionGrant[]]$Oauth2Permissions
+    [GraphApplicationPassword[]]$PasswordCredentials
     [Uri[]]$ReplyUrls
     [Uri]$SamlMetadataUrl
-    [object[]]$RequiredResourceAccess    
+    [GraphApplicationResourceAccess[]]$RequiredResourceAccess    
 }
 
 Class GraphDirectoryApplication:GraphDirectoryPrinicipal
 {
-    [object[]]$AddIns
-    [string]$AppId
-    [object[]]$AppRoles
     [bool]$AvailableToOtherTenants
-    [object[]]$GroupMembershipClaims
+    [string[]]$GroupMembershipClaims
     [Uri[]]$IdentifierUris
-    [object[]]$KnownClientApplications
+    [string[]]$KnownClientApplications
     [bool]$Oauth2AllowImplicitFlow
     [bool]$Oauth2AllowUrlPathMatching
     [bool]$Oauth2RequirePostResponse
@@ -144,7 +178,7 @@ Class GraphDirectoryApplication:GraphDirectoryPrinicipal
 Class GraphDirectoryServicePrincipal:GraphDirectoryPrinicipal
 {
     [bool]$AccountEnabled
-    [object[]]$AlternativeNames
+    [string[]]$AlternativeNames
     [string]$AppDisplayName
     [string]$AppOwnerTenantId
     [bool]$AppRoleAssignmentRequired
