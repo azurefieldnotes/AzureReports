@@ -806,9 +806,6 @@ Function GetSubscriptionSummary
             Write-Output $Result
         }
     }
-    END
-    {
-    }
 }
 
 Function Get-SubscriptionSummary
@@ -1087,10 +1084,6 @@ Function Export-TenantRoleTemplates
         [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         [TenantSummary[]]$Summary
     )
-    BEGIN
-    {
-
-    }
     PROCESS
     {
         foreach ($item in $Summary)
@@ -1098,10 +1091,6 @@ Function Export-TenantRoleTemplates
             $SelectScope=@('DisplayName','Description','ObjectId','ObjectType','DeletionTimestamp')
             Write-Output $item.RoleTemplates|Select-Object -Property $SelectScope
         }
-    }
-    END
-    {
-
     }
 }
 
@@ -1113,10 +1102,6 @@ Function Export-TenantOauthPermissionGrants
         [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         [TenantSummary[]]$Summary
     )
-    BEGIN
-    {
-
-    }
     PROCESS
     {
         foreach ($item in $Summary)
@@ -1125,9 +1110,47 @@ Function Export-TenantOauthPermissionGrants
             Write-Output $item.OauthPermissionGrants|Select-Object -Property $SelectScope
         }
     }
-    END
-    {
+}
 
+Function Export-TenantApplications
+{
+    [CmdletBinding(ConfirmImpact='None')]
+    param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [TenantSummary[]]$Summary
+    )
+    PROCESS
+    {
+        foreach ($item in $Summary)
+        {
+            $SelectScope=@('AppId','ObjectType','DisplayName','ObjectId','Oauth2Permissions','HomePage','Oauth2AllowImplicitFlow',
+                'Oauth2AllowUrlPathMatching','Oauth2RequirePostResponse','PublicClient','GroupMembershipClaims','AvailableToOtherTenants'
+            )
+            Write-Output $item.Applications|Select-Object -Property $SelectScope
+        }
+    }
+}
+
+Function Export-TenantServicePrincipals
+{
+    [CmdletBinding(ConfirmImpact='None')]
+    param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [TenantSummary[]]$Summary
+    )
+    PROCESS
+    {
+        foreach ($item in $Summary)
+        {
+            $SelectScope=@('AppId','ObjectType','DisplayName','ObjectId','AccountEnabled'
+                ,'Oauth2Permissions','HomePage','AlternativeNames',
+                'AppDisplayName','AppOwnerTenantId','PublisherName','ServicePrincipalNames','ServicePrincipalType',
+                'AppRoleAssignmentRequired','Tags'
+            )
+            Write-Output $item.ServicePrincipals|Select-Object -Property $SelectScope
+        }
     }
 }
 
@@ -1765,10 +1788,26 @@ Function Get-AzureDetailReport
         $Applications,
         [Parameter(Mandatory=$false)]
         [Switch]
-        $ResourcesOnly
+        $ResourcesOnly,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $TenantOnly   
     )
 
     $Report=[DetailReport]::new()
+    
+    if ($TenantOnly.IsPresent -or $ResourcesOnly.IsPresent -eq $false) {
+        #Get the Tenant Summaries
+        [TenantSummary[]]$TenantSummaries=@(Get-TenantSummary -TenantId $TenantId -AccessToken $GraphAccessToken `
+            -Start $Start -End $End `
+            -Events:$TenantEvents.IsPresent `
+            -OAuthPermissionGrants:$OAuthPermissionGrants.IsPresent `
+            -Applications:$Applications.IsPresent `
+            -ServicePrincipals:$ServicePrincipals.IsPresent
+        )
+        $Report.Summaries+=$TenantSummaries        
+    }
+    
     #Get the Subscription Summaries
     [SubscriptionSummary[]]$SubscriptionSummaries=@(Get-SubscriptionSummary -AccessToken $ArmAccessToken `
         -OfferId $OfferId -End $End -Start $Start `
@@ -1779,17 +1818,5 @@ Function Get-AzureDetailReport
         -ArmFrontDoorUri $ArmFrontDoorUri -SubscriptionFilter $SubscriptionFilter
     )
     $Report.Summaries+=$SubscriptionSummaries
-    if($ResourcesOnly.IsPresent -eq $false)
-    {
-        #Get the Tenant Summaries
-        [TenantSummary[]]$TenantSummaries=@(Get-TenantSummary -TenantId $TenantId -AccessToken $GraphAccessToken `
-            -Start $Start -End $End `
-            -Events:$TenantEvents.IsPresent `
-            -OAuthPermissionGrants:$OAuthPermissionGrants.IsPresent `
-            -Applications:$Applications.IsPresent `
-            -ServicePrincipals:$ServicePrincipals.IsPresent
-        )
-        $Report.Summaries+=$TenantSummaries
-    }
     Write-Output $Report
 }

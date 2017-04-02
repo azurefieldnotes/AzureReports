@@ -179,8 +179,11 @@ $GraphToken=Get-AzureADUserToken -ConnectionDetails $GraphConnection
     -MetricAggregationType $MetricAggregationType -MetricGranularity $MetricGranularity -UsageGranularity $UsageGranularity `
     -SubscriptionFilter $SubscriptionFilter -ResourcesOnly:$ResourcesOnly -Verbose:$VerbosePreference
 
+Write-Output $DetailReport
+
+<#
 foreach ($Report in $DetailReport.Summaries)
 {
     Write-Output $Report.Export()
 }
-
+#>
