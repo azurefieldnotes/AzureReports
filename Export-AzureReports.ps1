@@ -1,4 +1,3 @@
-
 <#PSScriptInfo
 
 .VERSION 1.0
@@ -28,13 +27,12 @@
 .RELEASENOTES
 
 #>
-
 <# 
-
 .DESCRIPTION 
  Exports a large set of Azure data in flat data sets
-#> 
-#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},Avanade.AzureReports
+#>
+
+#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},@{ModuleName='Avanade.AzureReports';ModuleVersion="1.0.3"}
 using module Avanade.AzureReports
 
 [CmdletBinding(ConfirmImpact='None',DefaultParameterSetName='Credential')]
@@ -132,6 +130,14 @@ param
     [Parameter(Mandatory=$false,ParameterSetName='Username')]
     [Parameter(Mandatory=$false,ParameterSetName='Credential')]
     [Switch]
+    $Applications,
+    [Parameter(Mandatory=$false,ParameterSetName='Username')]
+    [Parameter(Mandatory=$false,ParameterSetName='Credential')]
+    [Switch]
+    $ServicePrincipals,
+    [Parameter(Mandatory=$false,ParameterSetName='Username')]
+    [Parameter(Mandatory=$false,ParameterSetName='Credential')]
+    [Switch]
     $ResourcesOnly
 )
 
@@ -170,6 +176,7 @@ $GraphToken=Get-AzureADUserToken -ConnectionDetails $GraphConnection
     -TenantId $GraphTenants -GraphAccessToken $GraphToken.access_token `
     -Usage:$Usage.IsPresent -TenantEvents:$TenantEvents.IsPresent -Metrics:$Metrics.IsPresent `
     -InstanceData:$InstanceData.IsPresent -OauthPermissionGrants:$OAuthPermissionGrants.IsPresent `
+    -ServicePrincipals:$ServicePrincipals.IsPresent -Applications:$Applications.IsPresent `
     -MetricAggregationType $MetricAggregationType -MetricGranularity $MetricGranularity -UsageGranularity $UsageGranularity `
     -SubscriptionFilter $SubscriptionFilter -ResourcesOnly:$ResourcesOnly -Verbose:$VerbosePreference
 

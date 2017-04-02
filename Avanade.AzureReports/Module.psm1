@@ -1,4 +1,4 @@
-#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.2'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6"}
+#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.3'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6"}
 using module Avanade.Azure.Models
 
 #region concrete classes
@@ -394,6 +394,16 @@ Class TenantInstance:GraphTenantBase
         return Get-AzureADGraphOauthPermissionGrant -AccessToken $AccessToken -Top 999 -Verbose:$this.VerbosePreference
     }
 
+    [GraphDirectoryServicePrincipal[]]ServicePrincipals([string]$AccessToken)
+    {
+        return Get-AzureADGraphServicePrincipal -AccessToken $AccessToken -Verbose:$this.VerbosePreference
+    }
+
+    [GraphDirectoryApplication[]]Applications([string]$AccessToken)
+    {
+        return Get-AzureADGraphApplication -AccessToken $AccessToken -Verbose:$this.VerbosePreference
+    }    
+
     TenantInstance([string] $TenantId)
     {
         $this.TenantId=$TenantId
@@ -446,6 +456,8 @@ Class TenantSummaryExport:SummaryExport
     [Object[]]$AuditEvents
     [Object[]]$SigninEvents
     [Object[]]$OauthPermissionGrants
+    [Object[]]$Applications
+    [Object[]]$ServicePrincipals
 }
 
 Class SubscriptionSummary:SummaryReport
@@ -520,6 +532,8 @@ Class TenantSummary:SummaryReport
         $Result.RoleTemplates=$this.RoleTemplates
         $Result.Users=$this.Users
         $Result.OauthPermissionGrants=$this.OauthPermissionGrants
+        $Result.Applications=$this.Applications
+        $Result.ServicePrincipals=$this.ServicePrincipals
         return $Result
     }
 
@@ -532,6 +546,8 @@ Class TenantSummary:SummaryReport
     [GraphDirectoryRole[]]$Roles
     [GraphDirectoryRoleTemplate[]]$RoleTemplates
     [GraphOauth2PermissionGrant[]]$OauthPermissionGrants
+    [GraphDirectoryApplication[]]$Applications
+    [GraphDirectoryServicePrincipal[]]$ServicePrincipals
 
     TenantSummary([TenantInstance]$Tenant)
     {
@@ -600,7 +616,13 @@ Function GetTenantSummary
         $Events,
         [Parameter(Mandatory=$false)]
         [Switch]
-        $OauthPermissionGrants
+        $OauthPermissionGrants,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $ServicePrincipals,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $Applications
     )
 
     BEGIN
@@ -631,17 +653,25 @@ Function GetTenantSummary
             Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Role Templates" -PercentComplete 50
             $TenantSummary.RoleTemplates=$item.RoleTemplates($AccessToken)
 
-            Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Roles" -PercentComplete 60
+            Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Roles" -PercentComplete 55
             $TenantSummary.Roles=$item.Roles($AccessToken)
+
+            if($Applications.IsPresent)
+            {
+                Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Applications" -PercentComplete 65
+                $TenantSummary.Applications=$item.Applications($AccessToken)
+            }
+
+            if($ServicePrincipals.IsPresent)
+            {
+                Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving ServicePrincipals" -PercentComplete 60
+                $TenantSummary.ServicePrincipals=$item.ServicePrincipals($AccessToken)
+            }
 
             if($Events.IsPresent)
             {
                 Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Audit Events $($Start) - $($End)" -PercentComplete 70
                 $TenantSummary.AuditEvents=$item.AuditEvents($AccessToken,$Start,$End)
-            }
-
-            if($Events.IsPresent)
-            {
                 Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Signin Events $($Start) - $($End)" -PercentComplete 80
                 $TenantSummary.SigninEvents=$item.SigninEvents($AccessToken,$Start,$End)
             }
@@ -871,11 +901,18 @@ Function Get-TenantSummary
         $Events,
         [Parameter(Mandatory=$false)]
         [Switch]
-        $OauthPermissionGrants
+        $OauthPermissionGrants,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $ServicePrincipals,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $Applications
     )
     [TenantInstance[]]$Tenants=$TenantId|Select-Object -Property @{N='Value';E={[TenantInstance]::new($_)}}|Select-Object -ExpandProperty Value
     Write-Output $Tenants|GetTenantSummary -AccessToken $AccessToken `
     -Events:$TenantEvents.IsPresent -OAuthPermissionGrants:$OAuthPermissionGrants.IsPresent `
+    -Applications:$Applications.IsPresent -ServicePrincipals:$ServicePrincipals.IsPresent `
     -Start $Start -End $End
 }
 
@@ -1722,6 +1759,12 @@ Function Get-AzureDetailReport
         $OauthPermissionGrants,
         [Parameter(Mandatory=$false)]
         [Switch]
+        $ServicePrincipals,
+        [Parameter(Mandatory=$false)]
+        [Switch]
+        $Applications,
+        [Parameter(Mandatory=$false)]
+        [Switch]
         $ResourcesOnly
     )
 
@@ -1742,7 +1785,9 @@ Function Get-AzureDetailReport
         [TenantSummary[]]$TenantSummaries=@(Get-TenantSummary -TenantId $TenantId -AccessToken $GraphAccessToken `
             -Start $Start -End $End `
             -Events:$TenantEvents.IsPresent `
-            -OAuthPermissionGrants:$OAuthPermissionGrants.IsPresent
+            -OAuthPermissionGrants:$OAuthPermissionGrants.IsPresent `
+            -Applications:$Applications.IsPresent `
+            -ServicePrincipals:$ServicePrincipals.IsPresent
         )
         $Report.Summaries+=$TenantSummaries
     }

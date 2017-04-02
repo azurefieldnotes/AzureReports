@@ -1,14 +1,19 @@
-Class GraphDirectoryObject
+Class GraphDirectoryItem
 {
     [string]$DeletionTimestamp
-    [string]$Description
-    [bool]$DirSyncEnabled
-    [string]$DisplayName
-    [string]$LastDirSyncTime
-    [string]$Mail
     [string]$ObjectId
     [string]$ObjectType
     [string]${Odata.type}
+    [string]$DisplayName
+}
+
+Class GraphDirectoryObject:GraphDirectoryItem
+{
+    
+    [string]$Description
+    [bool]$DirSyncEnabled
+    [string]$LastDirSyncTime
+    [string]$Mail
     [string]$OnPremisesSecurityIdentifier
     [string]$MailNickname
     [Object[]]$ProvisioningErrors

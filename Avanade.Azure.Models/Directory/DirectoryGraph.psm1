@@ -57,6 +57,15 @@ Class GraphTenantBase
     {
         throw "This must be overloaded in an implementing class"
     }
+    [GraphDirectoryServicePrincipal[]]ServicePrincipals([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+
+    [GraphDirectoryApplication[]]Applications([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
 }
 
 Class GraphDirectoryUser:GraphDirectoryObject
@@ -100,6 +109,22 @@ Class GraphDirectoryGroup:GraphDirectoryObject
     [bool]$SecurityEnabled
 }
 
+Class GraphDirectoryPrinicipal:GraphDirectoryItem
+{
+    [object[]]$AddIns
+    [string]$AppId
+    [object[]]$AppRoles
+    [Uri]$ErrorUrl
+    [object[]]$KeyCredentials
+    [Uri]$HomePage
+    [Uri]$LogoutUrl
+    [object[]]$Oauth2Permissions
+    [object[]]$PasswordCredentials
+    [Uri[]]$ReplyUrls
+    [Uri]$SamlMetadataUrl
+    [object[]]$RequiredResourceAccess    
+}
+
 Class GraphDirectoryApplication:GraphDirectoryPrinicipal
 {
     [object[]]$AddIns
@@ -108,26 +133,12 @@ Class GraphDirectoryApplication:GraphDirectoryPrinicipal
     [bool]$AvailableToOtherTenants
     [object[]]$GroupMembershipClaims
     [Uri[]]$IdentifierUris
-    [string[]]$KnownClientApplications
+    [object[]]$KnownClientApplications
     [bool]$Oauth2AllowImplicitFlow
     [bool]$Oauth2AllowUrlPathMatching
     [bool]$Oauth2RequirePostResponse
     [bool]$PublicClient
-    [object[]]$RequiredResourceAccess
-}
-
-Class GraphDirectoryPrinicipal:GraphDirectoryObject
-{
-    [object[]]$AddIns
-    [string]$AppId
-    [object[]]$AppRoles
-    [Uri]$ErrorUrl
-    [object[]]$KeyCredentials
-    [Uri]$LogoutUrl
-    [object[]]$Oauth2Permissions
-    [object[]]$PasswordCredentials
-    [Uri[]]$ReplyUrls
-    [Uri]$SamlMetadataUrl
+    [string]${MainLogo@odata.mediaContentType}
 }
 
 Class GraphDirectoryServicePrincipal:GraphDirectoryPrinicipal
@@ -141,7 +152,7 @@ Class GraphDirectoryServicePrincipal:GraphDirectoryPrinicipal
     [string]$PublisherName
     [string[]]$ServicePrincipalNames
     [string]$ServicePrincipalType
-    [object[]]$Tags    
+    [string[]]$Tags    
 }
 
 Class GraphAuditEvent
