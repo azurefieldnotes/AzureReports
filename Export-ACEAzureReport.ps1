@@ -1,6 +1,6 @@
 <#PSScriptInfo
 
-.VERSION 1.0
+.VERSION 0.0.1
 
 .GUID 9b00cd5d-dd12-4edc-a2a8-8f2e8de2d6ee
 
@@ -28,6 +28,7 @@
 .EXTERNALSCRIPTDEPENDENCIES 
 
 .RELEASENOTES
+    Not even close to ready
 
 #>
 
