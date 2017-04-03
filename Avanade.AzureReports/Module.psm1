@@ -1806,16 +1806,18 @@ Function Get-AzureDetailReport
         )
         $Report.Summaries+=$TenantSummaries
     }
-
-    #Get the Subscription Summaries
-    [SubscriptionSummary[]]$SubscriptionSummaries=@(Get-SubscriptionSummary -AccessToken $ArmAccessToken `
-        -OfferId $OfferId -End $End -Start $Start `
-        -Region $Region -Locale $Locale `
-        -AggregationType $MetricAggregationType -MetricGranularity $MetricGranularity `
-        -UsageGranularity $UsageGranularity -InstanceData:$InstanceData.IsPresent `
-        -Usage:$Usage.IsPresent -Metrics:$Metrics.IsPresent `
-        -ArmFrontDoorUri $ArmFrontDoorUri -SubscriptionFilter $SubscriptionFilter
-    )
-    $Report.Summaries+=$SubscriptionSummaries
+    if($ResourcesOnly.IsPresent -or $TenantOnly.IsPresent -eq $false)
+    {
+        #Get the Subscription Summaries
+        [SubscriptionSummary[]]$SubscriptionSummaries=@(Get-SubscriptionSummary -AccessToken $ArmAccessToken `
+            -OfferId $OfferId -End $End -Start $Start `
+            -Region $Region -Locale $Locale `
+            -AggregationType $MetricAggregationType -MetricGranularity $MetricGranularity `
+            -UsageGranularity $UsageGranularity -InstanceData:$InstanceData.IsPresent `
+            -Usage:$Usage.IsPresent -Metrics:$Metrics.IsPresent `
+            -ArmFrontDoorUri $ArmFrontDoorUri -SubscriptionFilter $SubscriptionFilter
+        )
+        $Report.Summaries+=$SubscriptionSummaries        
+    }
     Write-Output $Report
 }

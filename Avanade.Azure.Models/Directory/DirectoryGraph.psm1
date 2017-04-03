@@ -167,7 +167,7 @@ Class GraphAuditEvent
     [string]$InternalCorrelationId
     [string]$Source
     [GraphAuditEventTarget[]]$Targets
-    [object]$TenantGeolocation
+    [string]$TenantGeolocation
     [string]$TenantId
     [string]$TenantName
 }
@@ -199,6 +199,36 @@ Class GraphDirectoryRole:GraphDirectoryRoleTemplate
     [bool]$IsSystem
     [bool]$RoleDisabled
     [string]$RoleTemplateId
+}
+
+Class GraphAnomalousSigninActivityEvent
+{
+    [int] $BlackListedIpLoginCount
+    [System.DateTimeOffset] $BlackListedIpTimeStamp
+    [string] $DisplayName
+    [string] $EventTime
+    [string] $Id
+    [object] $InfectedDeviceDeviceInformation
+    [string] $InfectedDeviceDeviceIp
+    [object] $InfectedDeviceLastAttemptToContactBotnet
+    [string] $InfectedDeviceLocation
+    [string] $InfectedDeviceReason
+    [System.DateTimeOffset] $InfectedDeviceTimeStamp
+    [string] $IpAddress
+    [string] $IrregularSignInClassification
+    [string] $IrregularSignInDeviceInformation
+    [string] $IrregularSignInLocation
+    [string] $MultipleGeographiesCurrentLocation
+    [string] $MultipleGeographiesExpectedHours
+    [System.DateTimeOffset] $MultipleGeographiesPreviousActivityDate
+    [string] $MultipleGeographiesPreviousLocation
+    [string] $MultipleGeographiesRequiredTime
+    [System.DateTimeOffset] $MultipleGeographiesTimeStamp
+    [string] $Reason
+    [object] $SignInAfterMutilpleFailuresLoginFailures
+    [System.DateTimeOffset] $SignInAfterMutilpleFailuresPrevActivityTime
+    [string] $Upn
+    [string] $UserName    
 }
 
 Class GraphSigninEvent

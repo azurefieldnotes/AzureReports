@@ -137,7 +137,15 @@ param
     [Parameter(Mandatory=$false,ParameterSetName='Username')]
     [Parameter(Mandatory=$false,ParameterSetName='Credential')]
     [Switch]
-    $ResourcesOnly
+    $ResourcesOnly,
+    [Parameter(Mandatory=$false,ParameterSetName='Username')]
+    [Parameter(Mandatory=$false,ParameterSetName='Credential')]
+    [Switch]
+    $TenantOnly,
+    [Parameter(Mandatory=$false,ParameterSetName='Username')]
+    [Parameter(Mandatory=$false,ParameterSetName='Credential')]
+    [Switch]
+    $FlattenRecords       
 )
 
 if($TenantEvents.IsPresent -and $GraphTenants -eq 'myOrganization')
@@ -177,13 +185,16 @@ $GraphToken=Get-AzureADUserToken -ConnectionDetails $GraphConnection
     -InstanceData:$InstanceData.IsPresent -OauthPermissionGrants:$OAuthPermissionGrants.IsPresent `
     -ServicePrincipals:$ServicePrincipals.IsPresent -Applications:$Applications.IsPresent `
     -MetricAggregationType $MetricAggregationType -MetricGranularity $MetricGranularity -UsageGranularity $UsageGranularity `
-    -SubscriptionFilter $SubscriptionFilter -ResourcesOnly:$ResourcesOnly -Verbose:$VerbosePreference
+    -SubscriptionFilter $SubscriptionFilter -ResourcesOnly:$ResourcesOnly -TenantOnly:$TenantOnly -Verbose:$VerbosePreference
 
-Write-Output $DetailReport
-
-<#
-foreach ($Report in $DetailReport.Summaries)
+if($FlattenRecords.IsPresent)
 {
-    Write-Output $Report.Export()
+    foreach ($Report in $DetailReport.Summaries)
+    {
+        Write-Output $Report.Export()
+    }
 }
-#>
+else
+{
+    Write-Output $DetailReport.Summaries
+}

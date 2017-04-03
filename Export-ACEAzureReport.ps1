@@ -106,7 +106,10 @@ param
     $ResourcesOnly,
     [Parameter(Mandatory=$false)]
     [Switch]
-    $TenantOnly    
+    $TenantOnly,
+    [Parameter(Mandatory=$false)]
+    [Switch]
+    $FlattenRecords    
 )
 
 if($TenantEvents.IsPresent -and $GraphTenants -eq 'myOrganization')
@@ -124,4 +127,12 @@ if($TenantEvents.IsPresent -and $GraphTenants -eq 'myOrganization')
     -ServicePrincipals:$ServicePrincipals.IsPresent -Applications:$Applications.IsPresent `
     -MetricAggregationType $MetricAggregationType -MetricGranularity $MetricGranularity -UsageGranularity $UsageGranularity `
     -SubscriptionFilter $SubscriptionFilter -ResourcesOnly:$ResourcesOnly -TenantOnly:$TenantOnly -Verbose:$VerbosePreference
-Write-Output $DetailReport
+
+if($FlattenRecords.IsPresent)
+{
+    $DetailReport.Summaries|ForEach-Object{Write-Output $_.Export()}
+}
+else
+{
+    Write-Output $DetailReport.Summaries
+}
