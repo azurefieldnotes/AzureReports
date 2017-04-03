@@ -16,58 +16,6 @@ Class GraphDomain
     [string[]]$SupportedServices
 }
 
-Class GraphTenantBase
-{
-    [string]$TenantId
-
-    hidden [bool]IsVerbose()
-    {
-        return $PSCmdlet.MyInvocation -and $PSCmdlet.MyInvocation.BoundParameters['Verbose'] -and $PSCmdlet.MyInvocation.BoundParameters['Verbose']
-    }
-
-    [GraphDomain[]]Domains([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphSigninEvent[]]SigninEvents([string]$AccessToken,[datetime]$Start,[datetime]$End)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphAuditEvent[]]AuditEvents([string]$AccessToken,[datetime]$Start,[datetime]$End)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphDirectoryGroup[]]Groups([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphDirectoryUser[]]Users([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphDirectoryRole[]]Roles([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphDirectoryRoleTemplate[]]RoleTemplates([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphOauth2PermissionGrant[]]OauthPermissionGrants([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-    [GraphDirectoryServicePrincipal[]]ServicePrincipals([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-
-    [GraphDirectoryApplication[]]Applications([string]$AccessToken)
-    {
-        throw "This must be overloaded in an implementing class"
-    }
-}
-
 Class GraphDirectoryUser:GraphDirectoryObject
 {
     [bool]$AccountEnabled
@@ -169,7 +117,7 @@ Class GraphDirectoryPrinicipal:GraphDirectoryItem
     [GraphApplicationPassword[]]$PasswordCredentials
     [Uri[]]$ReplyUrls
     [Uri]$SamlMetadataUrl
-    [GraphApplicationResourceAccess[]]$RequiredResourceAccess    
+    [GraphApplicationResourceAccess[]]$RequiredResourceAccess
 }
 
 Class GraphDirectoryApplication:GraphDirectoryPrinicipal
@@ -196,7 +144,7 @@ Class GraphDirectoryServicePrincipal:GraphDirectoryPrinicipal
     [string]$PublisherName
     [string[]]$ServicePrincipalNames
     [string]$ServicePrincipalType
-    [string[]]$Tags    
+    [string[]]$Tags
 }
 
 Class GraphAuditEvent
@@ -270,4 +218,53 @@ Class GraphSigninEvent
     [string]$LoginStatus
     [int]$SigninErrorCode
     [string]$FailureReason
+}
+
+Class GraphTenantBase
+{
+    [string]$TenantId
+
+    [System.Management.Automation.ActionPreference] $VerbosePreference='SilentlyContinue'
+
+    [GraphDomain[]]Domains([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphSigninEvent[]]SigninEvents([string]$AccessToken,[datetime]$Start,[datetime]$End)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphAuditEvent[]]AuditEvents([string]$AccessToken,[datetime]$Start,[datetime]$End)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphDirectoryGroup[]]Groups([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphDirectoryUser[]]Users([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphDirectoryRole[]]Roles([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphDirectoryRoleTemplate[]]RoleTemplates([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphOauth2PermissionGrant[]]OauthPermissionGrants([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+    [GraphDirectoryServicePrincipal[]]ServicePrincipals([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
+
+    [GraphDirectoryApplication[]]Applications([string]$AccessToken)
+    {
+        throw "This must be overloaded in an implementing class"
+    }
 }

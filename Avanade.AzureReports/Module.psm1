@@ -1,4 +1,4 @@
-#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.3'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6"}
+#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.3'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6.1"}
 using module Avanade.Azure.Models
 
 #region concrete classes
@@ -163,8 +163,6 @@ Class ResourceInstance:ResourceBase
 
 class SubscriptionInstance:ArmSubscriptionBase
 {
-    [System.Management.Automation.ActionPreference] $VerbosePreference='SilentlyContinue'
-
     static [int] $ActivityId=8001
 
     static [string] $ARMFrontDoorUri='https://management.azure.com'
@@ -350,6 +348,7 @@ class SubscriptionInstance:ArmSubscriptionBase
 
 Class TenantInstance:GraphTenantBase
 {
+
     [GraphDomain[]]Domains([string]$AccessToken)
     {
         return Get-AzureADGraphDomain -AccessToken $AccessToken
@@ -402,7 +401,7 @@ Class TenantInstance:GraphTenantBase
     [GraphDirectoryApplication[]]Applications([string]$AccessToken)
     {
         return Get-AzureADGraphApplication -AccessToken $AccessToken -Verbose:$this.VerbosePreference
-    }    
+    }
 
     TenantInstance([string] $TenantId)
     {
@@ -633,8 +632,8 @@ Function GetTenantSummary
     {
         foreach ($item in $Tenant)
         {
+            $item.VerbosePreference=$VerbosePreference
             $TenantSummary=[TenantSummary]::new($item)
-
             Write-Progress -Id $ActivityId -Activity "Summarizing Azure AD Tenant $($item.TenantId)" -Status "Retrieving Domains" -PercentComplete 10
             $TenantSummary.Domains=$item.Domains($AccessToken)
 
@@ -1791,11 +1790,11 @@ Function Get-AzureDetailReport
         $ResourcesOnly,
         [Parameter(Mandatory=$false)]
         [Switch]
-        $TenantOnly   
+        $TenantOnly
     )
 
     $Report=[DetailReport]::new()
-    
+
     if ($TenantOnly.IsPresent -or $ResourcesOnly.IsPresent -eq $false) {
         #Get the Tenant Summaries
         [TenantSummary[]]$TenantSummaries=@(Get-TenantSummary -TenantId $TenantId -AccessToken $GraphAccessToken `
@@ -1805,9 +1804,9 @@ Function Get-AzureDetailReport
             -Applications:$Applications.IsPresent `
             -ServicePrincipals:$ServicePrincipals.IsPresent
         )
-        $Report.Summaries+=$TenantSummaries        
+        $Report.Summaries+=$TenantSummaries
     }
-    
+
     #Get the Subscription Summaries
     [SubscriptionSummary[]]$SubscriptionSummaries=@(Get-SubscriptionSummary -AccessToken $ArmAccessToken `
         -OfferId $OfferId -End $End -Start $Start `

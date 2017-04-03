@@ -47,6 +47,7 @@ Class ArmSubscriptionBase:ArmItem
     [string]$DisplayName
     [ArmSubscriptionPolicies]$SubscriptionPolicies
     [string]$AuthorizationSource
+    [System.Management.Automation.ActionPreference] $VerbosePreference='SilentlyContinue'
 
     hidden [void] TestId(){
         if([string]::IsNullOrEmpty($this.SubscriptionId)){
