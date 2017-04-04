@@ -231,6 +231,19 @@ Class GraphAnomalousSigninActivityEvent
     [string] $UserName    
 }
 
+Class GraphIrregularSigninEvent
+{
+    [System.DateTimeOffset]$EventTime
+    [string]$IpAddress
+    [string]$EventClassification
+    [string]$Device
+    [string]$Reason
+    [string]$Location
+    [string]$Id
+    [string]$DisplayName
+    [string]$UserName
+}
+
 Class GraphSigninEvent
 {
     [string]$Id
