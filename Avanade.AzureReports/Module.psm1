@@ -1,4 +1,4 @@
-#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.3'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6.1"}
+#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.Azure.Models';ModuleVersion='1.0.3'},@{ModuleName='Avanade.ArmTools';ModuleVersion="1.6.2"}
 using module Avanade.Azure.Models
 
 #region concrete classes

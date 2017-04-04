@@ -31,7 +31,7 @@
 
 #>
 
-#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},@{ModuleName='Avanade.AzureReports';ModuleVersion="1.0.3"}
+#REQUIRES -Version 5 -Modules @{ModuleName='Avanade.AzureAD';ModuleVersion="1.2.3"},@{ModuleName='Avanade.AzureReports';ModuleVersion="1.0.5"}
 using module Avanade.AzureReports
 
 [CmdletBinding(ConfirmImpact='None',DefaultParameterSetName='Credential')]
